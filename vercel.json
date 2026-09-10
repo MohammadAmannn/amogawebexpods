@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install --no-frozen-lockfile --strict-peer-dependencies=false",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm exec expo export --platform web",
   "outputDirectory": "dist",
   "rewrites": [
