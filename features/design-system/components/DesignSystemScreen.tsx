@@ -118,12 +118,10 @@ export function DesignSystemScreen() {
 
   const listContent = (
     <View style={[styles.navColumn, { backgroundColor: colors.background }]}>
-      {!isDesktop && (
-        <DesignSystemHeader
-          onSearchPress={handleHeaderSearchPress}
-          onNotificationsPress={() => {}}
-        />
-      )}
+      <DesignSystemHeader
+        onSearchPress={handleHeaderSearchPress}
+        onNotificationsPress={() => {}}
+      />
 
       <DesignSystemSearch
         value={searchQuery}
@@ -454,7 +452,7 @@ export function DesignSystemScreen() {
   )
 
   return (
-    <UniversalLayout title='Design System' hideHeader={!isDesktop}>
+    <UniversalLayout title='Design System' hideHeader={true}>
       <KeyboardAvoidingView
         style={[styles.container, { backgroundColor: colors.background }]}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -596,7 +594,7 @@ const styles = StyleSheet.create({
   },
   desktopNavPane: {
     width: 320,
-    borderRightWidth: 1,
+    borderRightWidth: 0,
   },
   desktopMainPane: {
     flex: 1,
@@ -611,9 +609,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inspectorHeader: {
+    height: 52,
     paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -682,7 +680,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    borderWidth: 1,
+    borderWidth: 0,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -715,7 +713,7 @@ const styles = StyleSheet.create({
   codeContainer: {
     backgroundColor: '#09090b',
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0,
     overflow: 'hidden',
     marginTop: 8,
   },
@@ -725,7 +723,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
   },
   dotGroup: {
     flexDirection: 'row',
@@ -770,7 +768,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
   },
   mobileModalTitleBox: {
     flexDirection: 'row',
@@ -789,7 +787,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -91,7 +91,7 @@ export function AppHeader({
         </Pressable>
 
         <Pressable
-          onPress={() => router.push('/message' as any)}
+          onPress={() => router.push('/notifications' as any)}
           style={({ pressed }) => [
             styles.iconBtn,
             { backgroundColor: pressed ? colors.secondary : 'transparent' },
@@ -122,7 +122,7 @@ export function AppHeader({
 const styles = StyleSheet.create({
   header: {
     height: 48,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

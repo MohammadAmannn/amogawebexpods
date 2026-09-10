@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   drawerContainer: {
-    width: 175,
-    maxWidth: '75%',
+    width: 260,
+    maxWidth: '80%',
     height: '100%',
     shadowColor: '#000000',
     shadowOffset: { width: 4, height: 0 },

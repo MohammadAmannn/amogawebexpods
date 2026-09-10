@@ -78,16 +78,17 @@ export function DesignSystemSearch({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 12,
-    borderBottomWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderBottomWidth: 0,
   },
   inputWrapper: {
-    height: 36,
-    borderRadius: 8,
-    borderWidth: 1,
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
   },
   searchIcon: {
     marginRight: 8,

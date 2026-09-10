@@ -21,7 +21,7 @@ export type { ThemeColors }
 
 const THEME_NAME_KEY = 'amoga_color_theme'
 const THEME_MODE_KEY = 'amoga_theme_mode'
-export const DEFAULT_COLOR_THEME = 'zinc'
+export const DEFAULT_COLOR_THEME = 'violet'
 export const DEFAULT_APPEARANCE_MODE: AppearanceMode = 'light'
 
 interface ThemeContextType {

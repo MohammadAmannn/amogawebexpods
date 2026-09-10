@@ -68,11 +68,9 @@ export function CategoryFilter({
                   isActive
                     ? {
                         backgroundColor: activeBg,
-                        borderColor: activeBorder,
                       }
                     : {
-                        backgroundColor: 'transparent',
-                        borderColor: isDark ? colors.border : '#e2e8f0',
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
                       },
                   pressed && styles.chipPressed,
                 ]}
@@ -138,14 +136,14 @@ const styles = StyleSheet.create({
     maxHeight: 140,
   },
   scrollContent: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 6,
   },
   chipsWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: 6,
+    gap: 7,
   },
   chip: {
     flexDirection: 'row',
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0,
   },
   chipPressed: {
     opacity: 0.85,

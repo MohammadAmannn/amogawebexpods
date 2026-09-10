@@ -126,6 +126,17 @@ export function AppSidebar({
       comingSoon: true,
       match: (p: string) => p === '/todos' || p === '/tasks',
     },
+    {
+      title: 'Notification',
+      shortTitle: 'Notification',
+      url: '/notifications',
+      icon: Bell,
+      comingSoon: true,
+      match: (p: string) =>
+        p === '/notifications' ||
+        p === '/notification' ||
+        p === '/notice',
+    },
   ]
 
   const handlePress = (url: string) => {
@@ -158,18 +169,15 @@ export function AppSidebar({
           },
         ]}
       >
-        {/* Drawer Header: Tapping logo/brand closes the drawer */}
-        <Pressable
-          onPress={onNavigate}
-          style={({ pressed }) => [
-            styles.mobileDrawerHeader,
-            pressed && { backgroundColor: colors.secondary },
-          ]}
-          hitSlop={6}
-          accessibilityRole='button'
-          accessibilityLabel='Close Drawer'
-        >
-          <View style={styles.mobileBrandRow}>
+        {/* Drawer Header: Brand info on left + Cross icon on right */}
+        <View style={styles.mobileDrawerHeader}>
+          <Pressable
+            onPress={onNavigate}
+            style={styles.mobileBrandRow}
+            hitSlop={6}
+            accessibilityRole='button'
+            accessibilityLabel='Close Drawer'
+          >
             <View style={[styles.appLogoBox, { backgroundColor: colors.primary }]}>
               <Command
                 size={18}
@@ -177,7 +185,7 @@ export function AppSidebar({
                 strokeWidth={2.4}
               />
             </View>
-            <View>
+            <View style={styles.mobileBrandTextBox}>
               <Text
                 style={[styles.mobileAppName, { color: colors.foreground }]}
                 numberOfLines={1}
@@ -191,8 +199,21 @@ export function AppSidebar({
                 Workspace
               </Text>
             </View>
-          </View>
-        </Pressable>
+          </Pressable>
+
+          <Pressable
+            onPress={onNavigate}
+            style={({ pressed }) => [
+              styles.mobileCloseButton,
+              pressed && { backgroundColor: colors.secondary, opacity: 0.8 },
+            ]}
+            hitSlop={8}
+            accessibilityRole='button'
+            accessibilityLabel='Close Drawer'
+          >
+            <X size={18} color={colors.mutedForeground} strokeWidth={2.2} />
+          </Pressable>
+        </View>
 
         {/* Mobile Navigation List */}
         <ScrollView
@@ -216,10 +237,6 @@ export function AppSidebar({
                 onPress={() => handlePress(item.url)}
                 style={({ pressed }) => [
                   styles.mobileNavItem,
-                  isActive && {
-                    backgroundColor:
-                      colors.sidebarAccent || colors.secondary,
-                  },
                   pressed && { opacity: 0.8 },
                 ]}
                 accessibilityRole='button'
@@ -242,6 +259,14 @@ export function AppSidebar({
                     }
                     strokeWidth={2}
                   />
+                  {item.icon === Bell && unreadCount > 0 && (
+                    <View
+                      style={[
+                        styles.railBadgeDot,
+                        { backgroundColor: colors.destructive || '#ef4444' },
+                      ]}
+                    />
+                  )}
                 </View>
                 <Text
                   style={[
@@ -257,28 +282,6 @@ export function AppSidebar({
                 >
                   {item.title}
                 </Text>
-                {item.comingSoon && (
-                  <View
-                    style={[
-                      styles.comingSoonPill,
-                      {
-                        backgroundColor:
-                          resolvedMode === 'dark'
-                            ? 'rgba(255, 255, 255, 0.12)'
-                            : 'rgba(0, 0, 0, 0.06)',
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.comingSoonPillText,
-                        { color: colors.mutedForeground },
-                      ]}
-                    >
-                      Soon
-                    </Text>
-                  </View>
-                )}
                 {isActive && (
                   <View
                     style={[
@@ -311,7 +314,6 @@ export function AppSidebar({
                 styles.mobileAvatar,
                 {
                   backgroundColor: colors.secondary,
-                  borderColor: colors.border,
                 },
               ]}
             >
@@ -357,7 +359,6 @@ export function AppSidebar({
         styles.railContainer,
         {
           backgroundColor: colors.sidebar || colors.background,
-          borderRightColor: colors.sidebarBorder || colors.border,
         },
       ]}
     >
@@ -398,10 +399,6 @@ export function AppSidebar({
               onPress={() => handlePress(item.url)}
               style={({ pressed }) => [
                 styles.railNavItem,
-                isActive && {
-                  backgroundColor:
-                    colors.sidebarAccent || colors.secondary,
-                },
                 pressed && { opacity: 0.8, transform: [{ scale: 0.95 }] },
               ]}
               accessibilityRole='button'
@@ -425,6 +422,14 @@ export function AppSidebar({
                   }
                   strokeWidth={2}
                 />
+                {item.icon === Bell && unreadCount > 0 && (
+                  <View
+                    style={[
+                      styles.railBadgeDot,
+                      { backgroundColor: colors.destructive || '#ef4444' },
+                    ]}
+                  />
+                )}
               </View>
               <Text
                 style={[
@@ -440,92 +445,17 @@ export function AppSidebar({
               >
                 {item.shortTitle}
               </Text>
-              {item.comingSoon && (
-                <View
-                  style={[
-                    styles.railSoonPill,
-                    {
-                      backgroundColor:
-                        resolvedMode === 'dark'
-                          ? 'rgba(255, 255, 255, 0.12)'
-                          : 'rgba(0, 0, 0, 0.06)',
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.railSoonPillText,
-                      { color: colors.mutedForeground },
-                    ]}
-                  >
-                    Soon
-                  </Text>
-                </View>
-              )}
             </Pressable>
           )
         })}
       </ScrollView>
 
-      {/* Bottom Actions: Notification & Profile */}
+      {/* Bottom Actions: Profile */}
       <View
         style={[
           styles.railFooter,
-          { borderTopColor: colors.sidebarBorder || colors.border },
         ]}
       >
-        {/* Notification Button */}
-        <Pressable
-          onPress={() => handlePress('/message')}
-          style={({ pressed }) => [
-            styles.railNavItem,
-            (pathname === '/message' || pathname === '/notifications') && {
-              backgroundColor: colors.sidebarAccent || colors.secondary,
-            },
-            pressed && { opacity: 0.8, transform: [{ scale: 0.95 }] },
-          ]}
-          accessibilityRole='button'
-          accessibilityLabel='Notifications'
-        >
-          <View style={styles.railIconWrap}>
-            <Bell size={20} color={colors.mutedForeground} strokeWidth={2} />
-            {unreadCount > 0 && (
-              <View
-                style={[
-                  styles.railBadgeDot,
-                  { backgroundColor: colors.destructive || '#ef4444' },
-                ]}
-              />
-            )}
-          </View>
-          <Text
-            style={[styles.railNavLabel, { color: colors.mutedForeground }]}
-            numberOfLines={1}
-          >
-            Notice
-          </Text>
-          <View
-            style={[
-              styles.railSoonPill,
-              {
-                backgroundColor:
-                  resolvedMode === 'dark'
-                    ? 'rgba(255, 255, 255, 0.12)'
-                    : 'rgba(0, 0, 0, 0.06)',
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.railSoonPillText,
-                { color: colors.mutedForeground },
-              ]}
-            >
-              Soon
-            </Text>
-          </View>
-        </Pressable>
-
         {/* Profile Menu Trigger */}
         <Pressable
           onPress={() => setIsUserMenuOpen(true)}
@@ -541,7 +471,6 @@ export function AppSidebar({
               styles.railAvatar,
               {
                 backgroundColor: colors.secondary,
-                borderColor: colors.border,
               },
             ]}
           >
@@ -702,7 +631,7 @@ export function AppSidebar({
               ]}
               onPress={() => {
                 setIsUserMenuOpen(false)
-                router.push('/message' as any)
+                router.push('/notifications' as any)
                 if (onNavigate) onNavigate()
               }}
             >
@@ -737,18 +666,18 @@ export function AppSidebar({
 const styles = StyleSheet.create({
   // ─── Desktop Rail Styles ─────────────────────────────────
   railContainer: {
-    width: 72,
+    width: 76,
     height: '100%',
-    borderRightWidth: 1,
+    borderRightWidth: 0,
     flexDirection: 'column',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     zIndex: 20,
   },
   railHeader: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 14,
+    marginBottom: 16,
   },
   railLogoBox: {
     width: 40,
@@ -768,38 +697,38 @@ const styles = StyleSheet.create({
   },
   railNavContent: {
     alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 6,
-    paddingBottom: 8,
+    gap: 16,
+    paddingHorizontal: 8,
+    paddingBottom: 12,
   },
   railNavItem: {
-    width: 58,
-    paddingVertical: 7,
-    paddingHorizontal: 4,
+    width: 60,
+    paddingVertical: 2,
+    paddingHorizontal: 2,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 3,
+    gap: 4,
   },
   railIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
   railNavLabel: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: 'Open Sans',
     textAlign: 'center',
-    lineHeight: 12,
+    lineHeight: 14,
     letterSpacing: -0.2,
   },
   railBadgeDot: {
     position: 'absolute',
-    top: 2,
-    right: 2,
+    top: 3,
+    right: 3,
     width: 8,
     height: 8,
     borderRadius: 4,
@@ -807,50 +736,36 @@ const styles = StyleSheet.create({
   railFooter: {
     width: '100%',
     alignItems: 'center',
-    paddingTop: 10,
-    borderTopWidth: 1,
-    gap: 8,
+    paddingTop: 14,
+    borderTopWidth: 0,
+    gap: 14,
   },
   railAvatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderWidth: 1,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    borderWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
   railAvatarText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
     fontFamily: 'Open Sans',
-  },
-  railSoonPill: {
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-    borderRadius: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 1,
-  },
-  railSoonPillText: {
-    fontSize: 8,
-    fontWeight: '700',
-    fontFamily: 'Open Sans',
-    letterSpacing: 0.2,
   },
 
   // ─── Mobile Drawer Styles ─────────────────────────────────
   mobileDrawerContainer: {
-    width: 175,
-    maxWidth: '75%',
+    width: '100%',
     height: '100%',
     flexDirection: 'column',
     borderRightWidth: 0,
   },
   mobileDrawerHeader: {
-    height: 52,
+    height: 54,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 12,
     borderBottomWidth: 0,
   },
@@ -859,6 +774,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     flex: 1,
+  },
+  mobileBrandTextBox: {
+    flex: 1,
+  },
+  mobileCloseButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   appLogoBox: {
     width: 32,
@@ -931,19 +856,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Open Sans',
   },
-  comingSoonPill: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  comingSoonPillText: {
-    fontSize: 10,
-    fontWeight: '700',
-    fontFamily: 'Open Sans',
-    letterSpacing: 0.2,
-  },
   mobileFooter: {
     padding: 8,
     borderTopWidth: 0,
@@ -959,7 +871,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -990,7 +902,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 240,
     borderRadius: 14,
-    borderWidth: 1,
+    borderWidth: 0,
     padding: 8,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 6 },
@@ -1008,7 +920,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },

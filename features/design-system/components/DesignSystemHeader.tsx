@@ -1,5 +1,5 @@
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { Command, Search, Bell } from 'lucide-react-native'
 import { useTheme } from '@/providers/theme-provider'
 import { useDrawer } from '@/components/layout/UniversalLayout'
@@ -15,6 +15,8 @@ export function DesignSystemHeader({
   onNotificationsPress,
 }: DesignSystemHeaderProps) {
   const router = useRouter()
+  const { width } = useWindowDimensions()
+  const isDesktop = width >= 1024
   const { colors } = useTheme()
   const { openMobileDrawer } = useDrawer()
 
@@ -24,31 +26,41 @@ export function DesignSystemHeader({
         styles.headerContainer,
         {
           backgroundColor: colors.background,
-          borderBottomColor: colors.border,
         },
       ]}
     >
-      <Pressable
-        style={styles.leftGroup}
-        onPress={openMobileDrawer}
-        hitSlop={8}
-        accessibilityRole='button'
-        accessibilityLabel='Open Navigation Menu'
-      >
-        <View style={[styles.logoBox, { backgroundColor: colors.primary }]}>
-          <Command
-            size={16}
-            color={colors.primaryForeground || '#ffffff'}
-            strokeWidth={2.2}
-          />
-        </View>
-        <Text
-          style={[styles.headerTitle, { color: colors.foreground }]}
-          numberOfLines={1}
+      {!isDesktop ? (
+        <Pressable
+          style={styles.leftGroup}
+          onPress={openMobileDrawer}
+          hitSlop={8}
+          accessibilityRole='button'
+          accessibilityLabel='Open Navigation Menu'
         >
-          Design System
-        </Text>
-      </Pressable>
+          <View style={[styles.logoBox, { backgroundColor: colors.primary }]}>
+            <Command
+              size={16}
+              color={colors.primaryForeground || '#ffffff'}
+              strokeWidth={2.2}
+            />
+          </View>
+          <Text
+            style={[styles.headerTitle, { color: colors.foreground }]}
+            numberOfLines={1}
+          >
+            Design System
+          </Text>
+        </Pressable>
+      ) : (
+        <View style={styles.leftGroupDesktop}>
+          <Text
+            style={[styles.headerTitle, { color: colors.foreground }]}
+            numberOfLines={1}
+          >
+            Design System
+          </Text>
+        </View>
+      )}
 
       <View style={styles.rightGroup}>
         <Pressable
@@ -69,7 +81,7 @@ export function DesignSystemHeader({
             styles.iconButton,
             { backgroundColor: pressed ? colors.secondary : 'transparent' },
           ]}
-          onPress={onNotificationsPress || (() => router.push('/message' as any))}
+          onPress={onNotificationsPress || (() => router.push('/notifications' as any))}
           hitSlop={8}
           accessibilityRole='button'
           accessibilityLabel='Notifications'
@@ -83,17 +95,22 @@ export function DesignSystemHeader({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    height: 48,
+    height: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    borderBottomWidth: 1,
+    paddingHorizontal: 16,
+    borderBottomWidth: 0,
   },
   leftGroup: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    flexShrink: 1,
+  },
+  leftGroupDesktop: {
+    flexDirection: 'row',
+    alignItems: 'center',
     flexShrink: 1,
   },
   logoBox: {
