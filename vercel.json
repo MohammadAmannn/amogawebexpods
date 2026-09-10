@@ -1,6 +1,6 @@
 {
-  "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm exec expo export --platform web",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npx expo export --platform web",
   "outputDirectory": "dist",
   "rewrites": [
     {
